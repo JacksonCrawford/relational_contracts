@@ -42,14 +42,13 @@ def scraper(link):
 
     # Finds article's author
     try:
-        author = soupyLinks.find(class_="sc-iBzFoy gHmQjv byline__name")
-        aTag = author.find("a")
+        author = soupyLinks.find(class_="sc-jcwofb hGqTkL byline__name")                             
+        aTag = author.find("a") 
         span = author.find_all("span")
         finalName = str(aTag.contents[0]) + str(span[0].contents[0])
         jsonDict["author"] = str(finalName).lower()
     except AttributeError:
         jsonDict["author"] = "not found"
-        print(str(link) + " Had no author")
 
     # Finds whether or not the article is a magazine or not
     try:
@@ -69,7 +68,7 @@ def scraper(link):
 
     # Finds the article's category
     try:
-        catSoup = soupyLinks.find(class_="sc-hTRkEk hPqkJO rubric content-header__rubric rubric-vertical-align")
+        catSoup = soupyLinks.find(class_="sc-cOigif nCpoA rubric content-header__rubric rubric-vertical-align")
         category = catSoup.find_all("span")
         finalCategory = category[0].contents[0]
         jsonDict["category"] = str(finalCategory).lower()
@@ -171,5 +170,3 @@ def tagRm(text):
     text = text.replace("<br/>", "")
 
     return text
-
-#print(scraper("https://www.wired.com/sitemap/?month=5&week=2&year=1998"))
