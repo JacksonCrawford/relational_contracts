@@ -10,7 +10,7 @@ import time
 def scraper(link):
     # Declares dictionary for JSON export
     jsonDict = {"URL": str(), "heading": str(), "subheading": str(), "author": str(), "category": str(), "type": str(), "timestamp": str(), "text": str()}
-    
+
     #print(link)
     # Looks for article main content
     try:
@@ -31,7 +31,7 @@ def scraper(link):
         jsonDict["heading"] = str(header).lower()
     except AttributeError:
         jsonDict["heading"] = "not found"
-    
+
     # Finds article subheading
     try:
         subhead = soupyLinks.find(class_="content-header__row content-header__dek")
@@ -42,7 +42,7 @@ def scraper(link):
 
     # Finds article's author
     try:
-        author = soupyLinks.find(class_="sc-iBzFoy gHmQjv byline__name")
+        author = soupyLinks.find(class_="sc-hhIhEF kBkyQI byline__name")
         aTag = author.find("a")
         span = author.find_all("span")
         finalName = str(aTag.contents[0]) + str(span[0].contents[0])
@@ -69,7 +69,7 @@ def scraper(link):
 
     # Finds the article's category
     try:
-        catSoup = soupyLinks.find(class_="sc-hTRkEk hPqkJO rubric content-header__rubric rubric-vertical-align")
+        catSoup = soupyLinks.find(class_="sc-jOFreG cGsJLi rubric content-header__rubric rubric-vertical-align")
         category = catSoup.find_all("span")
         finalCategory = category[0].contents[0]
         jsonDict["category"] = str(finalCategory).lower()
@@ -80,7 +80,7 @@ def scraper(link):
     # Finds the text of the article (placed within <p></p> (paragraph) tags
     chunkySoup = soupyLinks.find(class_="article__chunks article__chunks--without-top-spacing-content-well")
     jsonDict["text"] += paragraph(chunkySoup)
-    
+
     return jsonDict
 
 def multipleContents(soup):
@@ -97,8 +97,8 @@ def multipleContents(soup):
             if len(aTag.contents) > 0:
                 for content in aTag.contents[1::]:
                     aContents[str(aTag)] += str(content)
-    
-    for key in aContents.keys():                                                                    
+
+    for key in aContents.keys():
             text = text.replace(key, aContents[key])
 
     return tagRm(text)
@@ -129,34 +129,34 @@ def paragraph(soup):
             else:
                 emContents[str(emTag)] = str(emTag.contents[0])
 
-        for strongTag in strongTags:                                                                    
+        for strongTag in strongTags:
             if len(strongTag.contents) == 0:
                 strongContents[str(aTag)] = str()
             else:
                 strongContents[str(strongTag)] = str(strongTag.contents[0])
 
-        for spanTag in spanTags:                                                                        
+        for spanTag in spanTags:
             if len(spanTag.contents) == 0:
                 spanContents[str(aTag)] = str()
             else:
                 spanContents[str(spanTag)] = str(spanTag.contents[0])
 
-        pTags = soup.find_all("p")                                                                
-        for pTag in pTags:                                                                              
-            for ele in pTag.contents:                                                                   
-                text += str(ele)                                                                        
-                                                                                              
-        for key in spanContents.keys():                                                                 
-            text = text.replace(key, spanContents[key])                                                 
-                                                                                                            
-        for key in emContents.keys():                                                                   
+        pTags = soup.find_all("p")
+        for pTag in pTags:
+            for ele in pTag.contents:
+                text += str(ele)
+
+        for key in spanContents.keys():
+            text = text.replace(key, spanContents[key])
+
+        for key in emContents.keys():
             text = text.replace(key, emContents[key])
 
         for key in strongContents.keys():
-            text = text.replace(key, strongContents[key])                                                                                                            
-        for key in aContents.keys():                                                                    
+            text = text.replace(key, strongContents[key])
+        for key in aContents.keys():
             text = text.replace(key, aContents[key])
-        
+
         text = text.replace("\\", "")
     except AttributeError:
         return "not found"
@@ -171,5 +171,3 @@ def tagRm(text):
     text = text.replace("<br/>", "")
 
     return text
-
-#print(scraper("https://www.wired.com/sitemap/?month=5&week=2&year=1998"))
