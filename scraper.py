@@ -21,9 +21,8 @@ def masterLinker():
     aTags = links.find_all("a")
     for link in aTags:
         url = link.contents[0]
-        '''if str(url) == "https://www.wired.com/sitemap?year=1998&month=5&week=2":
-            print("Banana")
-            resume = True'''
+        '''if str(url) == "https://www.wired.com/sitemap?year=0000&month=0&week=0":
+             resume = True'''
         if year in str(url) and resume:
             linkList.append(url)
     return linkList
