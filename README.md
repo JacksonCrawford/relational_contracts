@@ -10,6 +10,9 @@ Scrape article data from the WIRED Sitemap (https://www.wired.com/sitemap/)
 
 Performs the actual scraping of the article sites.
 
+#### newFoundation.py
+
+Same functionality as foundation.py, but adapted for alternate wired article layout.
 
 #### scraper.py
 
