@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import json
 import time
 
+import newFoundation
+
 
 # The function that actually accesses each link and finds the data.
 # All attributes that are searched for have exception handlers for the event that the data
@@ -10,6 +12,7 @@ import time
 def scraper(link):
     # Declares dictionary for JSON export
     jsonDict = {"URL": str(), "heading": str(), "subheading": str(), "author": str(), "category": str(), "type": str(), "timestamp": str(), "text": str()}
+    x = 0
 
     #print(link)
     # Looks for article main content
@@ -21,7 +24,11 @@ def scraper(link):
         site = requests.get(link)
 
     soup = BeautifulSoup(site.text, "lxml")
-    soupyLinks = soup.find(class_="article main-content")
+    try:
+        soupyLinks = soup.find(class_="article main-content")
+        chunkySoup = soupyLinks.find(class_="article__chunks article__chunks--without-top-spacing-content-well")
+    except AttributeError:
+        return newFoundation.scraper(link)
 
     jsonDict["URL"] = str(link)
 
@@ -42,7 +49,7 @@ def scraper(link):
 
     # Finds article's author
     try:
-        author = soupyLinks.find(class_="sc-hhIhEF kBkyQI byline__name")
+        author = soupyLinks.find(class_="sc-Fyfyc jBpufv byline__name")
         aTag = author.find("a")
         span = author.find_all("span")
         finalName = str(aTag.contents[0]) + str(span[0].contents[0])
@@ -69,17 +76,26 @@ def scraper(link):
 
     # Finds the article's category
     try:
-        catSoup = soupyLinks.find(class_="sc-jOFreG cGsJLi rubric content-header__rubric rubric-vertical-align")
+        catSoup = soupyLinks.find(class_="content-header__rubric-date-block")
         category = catSoup.find_all("span")
         finalCategory = category[0].contents[0]
         jsonDict["category"] = str(finalCategory).lower()
     except AttributeError:
         jsonDict["category"] = "not found"
         print(str(link) + " Had no category")
+    except IndexError:
+        jsonDict["category"] = "not found"
+        print(str(link) + " Had no category")
 
     # Finds the text of the article (placed within <p></p> (paragraph) tags
-    chunkySoup = soupyLinks.find(class_="article__chunks article__chunks--without-top-spacing-content-well")
-    jsonDict["text"] += paragraph(chunkySoup)
+    while x != 3:
+        try:
+            jsonDict["text"] += paragraph(chunkySoup)
+            break
+        except AttributeError:
+            print("Text not found -> #" + str(x))
+            x += 1
+            time.sleep(100)
 
     return jsonDict
 
