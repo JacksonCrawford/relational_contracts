@@ -49,9 +49,9 @@ def scraper(link):
 
     # Finds article's author
     try:
-        author = soupyLinks.find(class_="sc-Fyfyc jBpufv byline__name")
+        author = soupyLinks.find(class_="content-header__rubric-block")
         aTag = author.find("a")
-        span = author.find_all("span")
+        span = aTag.find_all("span")
         finalName = str(aTag.contents[0]) + str(span[0].contents[0])
         jsonDict["author"] = str(finalName).lower()
     except AttributeError:
@@ -60,7 +60,7 @@ def scraper(link):
 
     # Finds whether or not the article is a magazine or not
     try:
-        form = soupyLinks.find(class_="sc-gKAblj sc-iCoHVE sc-fFSRdu fFuSsE exJjRk fdffTR").contents[0]
+        form = soupyLinks.find(class_="sc-fubCfw sc-pFZIQ sc-bZSQDF jetItr fUXXxb eUgDnc").contents[0]
         jsonDict["type"] = str(form).lower()
     except AttributeError:
         jsonDict["type"] = "article"
@@ -132,6 +132,7 @@ def paragraph(soup):
         strongContents = dict()
         emTags = soup.find_all("em")
         emContents = dict()
+        imgTags = soup.find_all("img")
 
         for aTag in aTags:
             if len(aTag.contents) == 0:
@@ -172,6 +173,9 @@ def paragraph(soup):
             text = text.replace(key, strongContents[key])
         for key in aContents.keys():
             text = text.replace(key, aContents[key])
+
+        for tag in imgTags:
+            text = text.replace(str(tag), str())
 
         text = text.replace("\\", "")
     except AttributeError:

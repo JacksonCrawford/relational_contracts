@@ -21,7 +21,7 @@ def masterLinker():
     aTags = links.find_all("a")
     for link in aTags:
         url = link.contents[0]
-        '''if str(url) == "https://www.wired.com/sitemap?year=0000&month=0&week=0":
+        '''if str(url) == "https://www.wired.com/sitemap?year=2007&month=11&week=1":
              resume = True'''
         if year in str(url) and resume:
             linkList.append(url)
@@ -69,9 +69,10 @@ def main():
             print(str(link) + " -- #" + str(articleNum))
             linkNum += 1
 
-            time.sleep(random.randint(20, 180))
+            time.sleep(random.randint(10, 100))
 
     with open("stats.txt", "w") as file:
         file.write("Year: " + str(year) + "\nTime to complete: " + str(time.time() - startTime))
         file.write("\n# of files: " + str(linkNum) + "\n\nJackson's Notes: ")
+
 main()
