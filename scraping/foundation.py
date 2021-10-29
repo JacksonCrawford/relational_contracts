@@ -35,6 +35,7 @@ def scraper(link):
     # Finds article heading
     try:
         header = (soupyLinks.find("h1")).contents[0]
+#        print(header)
         jsonDict["heading"] = str(header).lower()
     except AttributeError:
         jsonDict["heading"] = "not found"
@@ -51,8 +52,11 @@ def scraper(link):
     try:
         author = soupyLinks.find(class_="content-header__rubric-block")
         aTag = author.find("a")
-        span = aTag.find_all("span")
-        finalName = str(aTag.contents[0]) + str(span[0].contents[0])
+        finalName = str(aTag.contents[0])
+#        span = aTag.find_all("span")
+#        print(aTag.contents)
+#        exit()
+#        finalName = str(aTag.contents[0]) + str(span[0].contents[0])
         jsonDict["author"] = str(finalName).lower()
     except AttributeError:
         jsonDict["author"] = "not found"

@@ -69,7 +69,7 @@ def main():
             print(str(link) + " -- #" + str(articleNum))
             linkNum += 1
 
-            time.sleep(random.randint(10, 100))
+            time.sleep(random.randint(8, 35))
 
     with open("stats.txt", "w") as file:
         file.write("Year: " + str(year) + "\nTime to complete: " + str(time.time() - startTime))
