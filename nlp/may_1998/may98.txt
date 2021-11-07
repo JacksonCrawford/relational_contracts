@@ -1,0 +1,10 @@
+Scraped: Friday, November 20th, ~08:30 EST
+
+# Files: 185
+File Names: wired_article_05.01.1998.xxx.json
+
+Scraping program: famework.py
+Time to complete: 34m54s
+Delay: 10 seconds
+
+

@@ -1,0 +1,10 @@
+{
+    "URL": "https://www.wired.com/1998/05/networking-consumer-gadgets",
+    "heading": "networking consumer gadgets",
+    "subheading": "sony, along with general instruments, will show off prototype technology that lets vcrs, tv set-tops, cameras, and other home gadgets speak to each other.",
+    "author": "wired news report",
+    "category": "science",
+    "type": "article",
+    "timestamp": "05.01.1998 03:02 PM",
+    "text": "it should make zap! he sends digital camera pics to the set-top for tv viewing. zing! his sony minidisc recordings are sent to the stereo for playback. click. he responds to a knock at the front door via remote camera. tap. he's on the internet. ringggg... it's a video phone call from auntie in phoenix.nifty perhaps, but it's only a demonstration, at least for now. no such network-aware gadgets are commercially available.sony is hoping to change that. the japanese company, along with set-top box maker general instruments, will show off a system for networking home electronics -- from dvd players to set-tops to camcorders to tvs -- at the upcoming cable '98 industry conference. the demonstration will center around a home-networking technology from sony running on a prototype general instrument set-top box. the demo set-top is capable of exchanging information with other prototype electronics.sony's \"home networking module\" is software layered between a device's operating system and its application software. it allows digital electronics equipped with a special interface, sony's i.link, to be linked and interoperated. the interface, sony says, lets devices send and receive digital commands and digital audio and video streams at up to 200 megabits per second.among the demo applications: a tv control menu of home-networked, audio-visual devices equipped with the i.link interface, home monitoring via special remote cameras, high-speed, set-top internet access, and video telephony via the cable tv network.the prototype architecture also includes a search function, the companies say, which will let users hunt by topic for content on all their devices."
+}
