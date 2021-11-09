@@ -1,0 +1,26 @@
+Hypernym,Weight by occurence
+Synset('activity.n.01'),2413
+Synset('person.n.01'),1540
+Synset('institution.n.01'),1466
+Synset('time_period.n.01'),1288
+Synset('computer_network.n.01'),1174
+Synset('collection.n.01'),971
+Synset('large_integer.n.01'),922
+Synset('gregorian_calendar_month.n.01'),885
+Synset('message.n.02'),875
+Synset('instrumentality.n.03'),783
+Synset('act.n.02'),753
+Synset('group.n.01'),697
+Synset('tract.n.01'),681
+Synset('people.n.01'),663
+Synset('act.v.01'),645
+Synset('happening.n.01'),633
+Synset('weekday.n.01'),627
+Synset('income.n.01'),600
+Synset('application.n.01'),599
+Synset('large_indefinite_quantity.n.01'),578
+Synset('kind.n.01'),577
+Synset('property.n.02'),574
+Synset('work.n.01'),550
+Synset('natural_object.n.01'),538
+Synset('broadcasting.n.02'),532
