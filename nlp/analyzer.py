@@ -1,197 +1,215 @@
 from nltk.corpus import wordnet as wn
-from nltk.corpus import stopwords
 import csv
 import re
 import json
 from collections import OrderedDict
 from pathlib import Path
+from hyposet import hyposet
+from new_word import new_word
+from word_cleaner import word_cleaner
+from stopwords import stopword_generator
 
 
-# TODO: Refactor topics to word frequency evaluator
-# TODO: Finish weight system
-# TODO: Implement hypernym evaluator
+# Initialize dictionaries of hyposet and new_word objects
+hyposets = list()
+new_words = list()
 
-# Initialize dict of topics and list or articles
-topics = dict()
-definitions = list()
-hypernyms = dict()
+# Initialize stopword_generator object
+stopper = stopword_generator()
+# Store the set of stopwords
+english_stops = stopper.get_stopwords()
 
-# Get the nltk bundled stopwords and add some of my own
-def get_stopwords():
-    stops = set(stopwords.words("english"))
-
-    stops.add("one")
-    stops.add("two")
-    stops.add("three")
-    stops.add("four")
-    stops.add("five")
-    stops.add("six")
-    stops.add("seven")
-    stops.add("eight")
-    stops.add("nine")
-    stops.add("ten")
-    stops.add("ours")
-    stops.add("our")
-    stops.add("would")
-    stops.add("could")
-    stops.add("should")
-    stops.add("said")
-    stops.add("like")
-    stops.add("also")
-    stops.add("says")
-    stops.add("percent")
-    stops.add("first")
-    stops.add("get")
-
-    return stops
-
-# Set of stopwords
-english_stops = get_stopwords()
+# Initialize the word_cleaner object
+cleaner = word_cleaner()
 
 
-# Remove all non-alphanumeric characters
-# TODO: Hyphens
-# TODO: 's
-def clean(word):
-    code = 0
-    for letter in word:
-        code = ord(letter)
-        if code < 65 or code > 122 or (code > 90 and code < 97):
-            word = word.replace(letter, "")
-
-    return word
-
-
-# Get all the articles (currently from the first day of May 1998 data
+# Method to get all the articles (currently from the first day of May 1998 data
 def get_data():
     folder = Path("/home/jacksoncrawford/cs/relational_contracts/nlp/2000/").rglob("*.json")
+    # folder = Path("/home/jacksoncrawford/cs/relational_contracts/nlp/test_articles/").rglob("*.json")
     files = [file for file in folder]
-    article_num = 1
-    article_num_f = f"{article_num:03}"
-    articulos = list()
+    text_list = list()
 
-#    for i in range(len(files)):
+    # Iterate through files
     for file in files:
+        # Open file
         with open(file, "r") as infile:
-            articulos.append(json.loads(infile.read()))
+            # Append contents to text_list
+            text_list.append(json.loads(infile.read()))
 
-        article_num += 1
-        article_num_f = f"{article_num:03}"
+    return text_list
 
-    
-    return articulos
-#    return [[articulo["heading"] for articulo in articulos], [articulo["text"] for articulo in articulos]]
-
+# Store article data from get_data() in articles
 articles = get_data()
 
-# Add a word to toipcs if it is not already there. If it is, increment by weight
-def add_to_topics(word, weight):
-    if word not in topics:
-        topics[word] = 1
-    else:
-        topics[word] += 1
+# Method to get the keys for sorting the hyposets list
+def get_sorter_key_hyp(hyposet):
+    return hyposet.get_count()
 
-# Add a word to hypernyms if it is not already there. If it is, increment by weight
-def add_to_hypernyms(word, weight):
-    if word not in hypernyms:
-        hypernyms[word] = weight
-    else:
-        hypernyms[word] += weight
+# Method to get the keys for sorting the new_words list
+def get_sorter_key_nw(new_word):
+    return new_word.get_count()
 
+# Method to check if hyponyms contains an argued hypernym
+def hyposets_contains(hypernym):
+    # Counter for returning index
+    index = 0
+    for hyposet in hyposets:
+        # If hypernym is in hyposets, return the index
+        if hyposet.get_hypernym() == hypernym:
+            return index
+        index += 1
 
-# Sort the topics dictionary by value and print the top twenty-five
-def top_topics():
-    sorted_synms = dict(reversed(sorted((value, key) for (key, value) in topics.items())))
+    # If hypernym was not found, return -1
+    return -1
 
-    print("Word  :  Weight")
-    count = 0
+# Method to check if new_words contains an argued new_word
+def new_words_contains(word):
+    # Counter for returning index
+    index = 0
+    for new_word in new_words:
+        # If argued word is in new_words, return the index
+        if new_word.get_word() == word:
+            return index
+        index += 1
 
-    f = open("word_count.csv", "w")
-    writer = csv.writer(f)
-    writer.writerow(["Word", "Weight by occurence"])
+    # If word was not found, return -1
+    return -1
 
-    for key, value in sorted_synms.items():
-        print(value, ":", key)
-        writer.writerow([value, key])
-        count += 1
+# Method to display the top 25 hyposets and store them in a json
+def top_hyposets():
+    # Sort the hyposets by the count (frequency)
+    hyposets.sort(key=get_sorter_key_hyp)
+    hyposets.reverse()
 
-        if count == 25:
-            break
-
-    f.close()
-
-# Sort the topics dictionary by value and print the top twenty-five
-def top_hypernyms():
-    sorted_topics = dict(reversed(sorted((value, key) for (key, value) in hypernyms.items())))
+    # Print heading
     print("\nhypernym  :  Weight")
     count = 0
-
-    f = open("hypernym.csv", "w")
-    writer = csv.writer(f)
-    writer.writerow(["Hypernym", "Weight by occurence"])
-
-    for key, value in sorted_topics.items():
-        print(value, ":", key)
-        writer.writerow([value, key])
+    # Loop through hyposets
+    for hyposet in hyposets:
+        # Print the hypernym
+        print("\n", hyposet.get_hypernym(), ":", hyposet.get_count());
+        # Print the synsets
+        print("\t|->", hyposet.get_synsets())
         count += 1
 
+        # Terminate loop if count is 25
         if count == 25:
             break
 
-    f.close()
+# Method to display the top 25 new_words and store them in a json
+def top_new_words():
+    # Sort the new_words by the count (frequency)
+    new_words.sort(key=get_sorter_key_nw)
+    new_words.reverse()
 
-# Method to analyze an article's header
-def analyze_header(header):
-    header_text = header.split()
-    header_text = [clean(word) for word in header_text if clean(word) != ""]
-    header_text = [word for word in header_text if word not in english_stops]
+    # Print heading
+    print("\nnew_word  :  Weight")
+    count = 0
+    # Loop through new_words
+    for new_word in new_words:
+        # Print the root word
+        print("\n", new_word.get_word(), ":", new_word.get_count());
+        # Print associated words (preceding in text)
+        print("\t|->", new_word.get_prev_words())
+        count += 1
 
-    hns = list()
-
-    for word in header_text:
-        try:
-            add_to_topics(word, 4)
-            syn = wn.synsets(word)[0]
-            definitions.append(syn.definition()[0])
-            
-            add_to_hypernyms(syn.hypernyms()[0], 4)
-        except:
-            definitions.append("")
-
+        # Terminate loop if count is 25
+        if count == 25:
+            break
 
 # Method to analyze an article's text
 def analyze_article_text(article):
+    # Split the article's text and store it in text
     text = article.split()
-    text = [clean(word) for word in text if clean(word) != ""]
+    # Clean text and remove stopwords
+    text = [cleaner.clean(word) for word in text if cleaner.clean(word) != ""]
     text = [word for word in text if word not in english_stops]
 
-    hns = list()
+    # Initialize prev_word variable for storing previous word in loop
+    prev_word = str()
 
+    # Loop through each word in text
     for word in text:
         try:
-            add_to_topics(word, 1)
+            # Store synset of word in syn
             syn = wn.synsets(word)[0]
-            definitions.append(syn.definition()[0])
+            # Get hypernym of syn
+            hypernym = syn.hypernyms()[0]
+            # Get index of hypernym in hyposets
+            contains = hyposets_contains(hypernym)
 
-            add_to_hypernyms(syn.hypernyms()[0], 1)
-        except:
-            definitions.append("")
+            # If it already exists in hyposets, add its synset and add the word
+            if(contains > 0):
+                hyposets[contains].add_synset(syn)
+                hyposets[contains].add_word(word)
+                hyposets[contains].inc_count()
+            else: # If it does not exist in hyposets, create it (along with synset and word)
+                obj = hyposet(syn.hypernyms()[0])
+                obj.add_synset(syn)
+                obj.add_word(word)
+                hyposets.append(obj)
+        except IndexError as err: # Catch error for a word not in WordNet
+            # Get index of word in new_words
+            contains = new_words_contains(word)
 
-    text = [clean(word) for word in text if clean(word) != ""]
+            # If it already exists in new_words, add its previous word
+            if(contains > 0):
+                new_words[contains].add_prev_word(prev_word)
+                new_words[contains].inc_count()
+            else: # If it does not exist in new_words, add it (along with previous word)
+                obj = new_word(word)
+                obj.add_prev_word(prev_word)
+                new_words.append(obj)
+        except KeyError as kerr:
+            pass
+
+        # Set word to be prev_word at end of loop iteration
+        prev_word = word
+
+    # Clean text again
+    text = [cleaner.clean(word) for word in text if cleaner.clean(word) != ""]
 
 
 # Main method
 def main():
-    articles = get_data()
-    
-    text = str()
-
     for article in articles:
-        analyze_header(article["heading"])
         analyze_article_text(article["text"])
 
-    top_topics()
-    top_hypernyms()
+    # Print the top hyposets and new_words (and sorting the lists)
+    top_hyposets()
+    top_new_words()
+
+    # Open results.json
+    with open("results.json", "w") as outfile:
+        # Initialize lists for storing hyposets and new_words
+        top_twentyfive_hyp = list()
+        top_twentyfive_nw = list()
+
+        count = 0
+
+        # Loop through first 25 hyposets
+        for hyposet in hyposets:
+            # Add json dict to list
+            top_twentyfive_hyp.append(hyposet.get_json())
+
+            count += 1
+            if count == 25:
+                break
+
+        count = 0
+
+        # Loop through first 25 new_words
+        for new_word in new_words:
+            # Add json dict to list
+            top_twentyfive_nw.append(new_word.get_json())
+
+            count += 1
+            if count == 25:
+                break
+
+        # Combine both lists and write them two results.json
+        json.dump(top_twentyfive_hyp + top_twentyfive_nw, outfile)
 
 if __name__=="__main__":
     main()
