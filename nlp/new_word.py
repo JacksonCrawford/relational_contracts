@@ -7,6 +7,8 @@ class new_word:
         self.prev_words = dict()
         # Store count
         self.count = 1
+        # Store monthly occurences
+        self.months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     # Method to add previous words to prev_words (or increment count if it already exists)
     def add_prev_word(self, prev_word):
@@ -24,6 +26,19 @@ class new_word:
     def inc_count(self):
         self.count += 1
         return True
+
+    def add_occurence(self, month):
+        if(month[0] == "0"):
+            self.months[int(month[1])-1] += 1
+        else:
+            self.months[int(month)-1] += 1
+
+        # self.months[month] += 1
+        self.count += 1
+        return True
+
+    def get_occurences(self):
+        return self.months
 
     # Method to get the count
     def get_count(self):

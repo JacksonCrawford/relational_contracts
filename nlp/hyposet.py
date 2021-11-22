@@ -49,9 +49,16 @@ class hyposet:
     def get_hypernym(self):
         return self.hypernym
 
+    def get_hypernym_str(self):
+        return self.hypernym.name()
+
     # Method to get the synsets
     def get_synsets(self):
         return self.synsets
+
+    # Method to get the synsets
+    def get_synset_count(self, syn):
+        return self.synsets[syn]
 
     # Method to get the words
     def get_words(self):
