@@ -26,7 +26,8 @@ cleaner = word_cleaner()
 # Method to get all the articles (currently from the first day of May 1998 data
 def get_data():
     # folder = Path("/home/jacksoncrawford/cs/relational_contracts/nlp/2000/").rglob("*.json")
-    folder = Path("/home/jacksoncrawford/cs/relational_contracts/nlp/1999/").rglob("*.json")
+    # folder = Path("/home/jacksoncrawford/cs/relational_contracts/nlp/1999/").rglob("*.json")
+    folder = Path("/home/jacksoncrawford/cs/relational_contracts/nlp/test_articles/").rglob("*.json")
     files = [file for file in folder]
     text_list = list()
 
@@ -100,25 +101,25 @@ def top_hyposets():
             break
 
 # Method to display the top 25 new_words and store them in a json
-# def top_new_words():
+def top_new_words():
     # Sort the new_words by the count (frequency)
-#     new_words.sort(key=get_sorter_key_nw)
-#     new_words.reverse()
+    new_words.sort(key=get_sorter_key_nw)
+    new_words.reverse()
 
     # Print heading
-#     print("\nnew_word  :  Weight")
-#     count = 0
+    print("\nnew_word  :  Weight")
+    count = 0
     # Loop through new_words
-#     for new_word in new_words:
+    for new_word in new_words:
         # Print the root word
-#         print("\n", new_word.get_word(), ":", new_word.get_count());
+        print("\n", new_word.get_word(), ":", new_word.get_count());
         # Print associated words (preceding in text)
-#         print("\t|->", new_word.get_prev_words())
-#         count += 1
+        print("\t|->", new_word.get_prev_words())
+        count += 1
 
         # Terminate loop if count is 25
-#         if count == 25:
-#             break
+        if count == 25:
+            break
 
 # Method to analyze an article's text
 def analyze_article_text(article):
@@ -154,16 +155,16 @@ def analyze_article_text(article):
         except IndexError as err: # Catch error for a word not in WordNet
             pass
             # Get index of word in new_words
-            # contains = new_words_contains(word)
+            contains = new_words_contains(word)
 
             # If it already exists in new_words, add its previous word
-            # if(contains > 0):
-            #     new_words[contains].add_prev_word(prev_word)
-            #     new_words[contains].inc_count()
-            # else: # If it does not exist in new_words, add it (along with previous word)
-            #     obj = new_word(word)
-            #     obj.add_prev_word(prev_word)
-            #     new_words.append(obj)
+            if(contains > 0):
+                new_words[contains].add_prev_word(prev_word)
+                new_words[contains].inc_count()
+            else: # If it does not exist in new_words, add it (along with previous word)
+                obj = new_word(word)
+                obj.add_prev_word(prev_word)
+                new_words.append(obj)
         except KeyError as kerr:
             pass
 
@@ -176,18 +177,18 @@ def analyze_article_text(article):
 
 # Main method
 def main():
+    # Analyze every article
     for article in articles:
         analyze_article_text(article["text"])
 
     # Print the top hyposets and new_words (and sorting the lists)
     top_hyposets()
-    # top_new_words()
+    top_new_words()
 
-    # Open results.json
-    with open("hyposet_results.json", "w") as outfile:
+    # Open output/hyposet_results.json
+    with open("output/hyposet_results.json", "w") as outfile:
         # Initialize lists for storing hyposets and new_words
         top_twentyfive_hyp = list()
-
 
         count = 0
 
@@ -200,56 +201,26 @@ def main():
             if count == 25:
                 break
 
-
         json.dump(top_twentyfive_hyp, outfile)
 
-    # with open("new_word_results.json", "w") as outfile:
-    #     top_twentyfive_nw = list()
-    #     count = 0
-        # Loop through first 25 new_words
-    #     for new_word in new_words:
-            # Add json dict to list
-    #         top_twentyfive_nw.append(new_word.get_json())
-
-    #         count += 1
-    #         if count == 25:
-    #             break
-
-        # Combine both lists and write them two results.json
-    #     json.dump(top_twentyfive_nw, outfile)
-
-    # Open results.json
-    # with open("dv_results.json", "w") as outfile:
+    # Open output/new_word_results.json
+    with open("output/new_word_results.json", "w") as outfile:
         # Initialize lists for storing hyposets and new_words
-    #     top_twentyfive_hyp = list()
+        top_twentyfive_nw = list()
 
-    #     count = 0
+        count = 0
 
         # Loop through first 25 hyposets
-    #     for hyposet in hyposets:
+        for new_word in new_words:
             # Add json dict to list
-    #         top_twentyfive_hyp.append(hyposet.get_json())
+            top_twentyfive_nw.append(new_word.get_json())
 
-    #         count += 1
-    #         if count == 50:
-    #             break
+            count += 1
+            if count == 25:
+                break
 
-
-
-
-        # top_twentyfive_nw = list()
-        # count = 0
-        # Loop through first 25 new_words
-        # for new_word in new_words:
-            # Add json dict to list
-        #     top_twentyfive_nw.append(new_word.get_json())
-
-        #     count += 1
-        #     if count == 25:
-        #         break
-
-        # Combine both lists and write them two results.json
-        # json.dump({"nodes":top_twentyfive_hyp, "links":top_twentyfive_nw}, outfile)
+        # Dump into json
+        json.dump(top_twentyfive_nw, outfile)
 
 if __name__=="__main__":
     main()
