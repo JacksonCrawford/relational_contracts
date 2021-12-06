@@ -33,7 +33,7 @@ def get_data():
 
     # Iterate through files
     for file in files:
-        # Open file
+        # Open filejj
         with open(file, "r") as infile:
             # Append contents to text_list
             text_list.append(json.loads(infile.read()))

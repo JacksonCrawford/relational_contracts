@@ -8,6 +8,7 @@ const line_svg = d3.select("#line_chart")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
+    .style("stroke", "black")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 //Read the data
@@ -26,6 +27,8 @@ d3.csv("article_count.csv",
             .range([ 0, width ]);
         line_svg.append("g")
             .attr("transform", `translate(0, ${height})`)
+            .style("stroke", "black")
+            .style("font-size", "12px")
             .call(d3.axisBottom(x));
 
         line_svg.append("text")
@@ -39,6 +42,7 @@ d3.csv("article_count.csv",
             .domain([0, d3.max(data, function(d) { return +d.value; })])
             .range([ height, 0 ]);
         line_svg.append("g")
+            .style("font-size", "12px")
             .call(d3.axisLeft(y));
 
         // Add the line
@@ -55,10 +59,10 @@ d3.csv("article_count.csv",
         line_svg.append("text")
             .attr("class", "y label")
             .attr("text-anchor", "end")
-            .attr("y", -70)
+            .attr("y", -83)
             .attr("x", -320)
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)")
-            .text("count");
+            .text("# of Articles");
 
     })

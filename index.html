@@ -6,12 +6,39 @@
 -->
 <html>
 	<head>
-		<title>Relational Contracts Data Vis</title>
+		<title>CS360 Final Project</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<script src="https://d3js.org/d3.v6.min.js"></script>
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			#tooltip {
+				position: absolute;
+				width: 200px;
+				height: auto;
+				padding: 10px;
+				background-color: mediumaquamarine;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				pointer-events: none;
+			}
+
+			#tooltip.hidden {
+				display: none;
+			}
+
+			#tooltip p {
+				margin: 0;
+				font-family: sans-serif;
+				font-size: 16px;
+				line-height: 20px;
+			}
+		</style>
 
 	</head>
 	<body class="is-preload">
@@ -38,7 +65,7 @@
 					<section id="intro" class="wrapper style1 fullscreen fade-up">
 						<div class="inner">
 							<h1>Relational Contracts Visualization</h1>
-							<p>The home for the data visualization of a NLP analysis of archived WIRED magazine and website articles.</p>
+							<p>The home for the data visualization of a basic language analysis of archived WIRED magazine and website articles. The goals of the project are to do an in-depth topic analysis, and these language results will be important data points for that analysis.</p>
 						</div>
 					</section>
 
@@ -50,13 +77,17 @@
 						<div class="features">
 							<section>
 								<div id="line_chart"></div>
+								<div id="tooltip" class="hidden">
+									<p><strong># of Articles this Year</strong></p>
+									<p><span id="value">100</span></p>
+								</div>
 							</section>
 						</div>
 					</div>
 				</section>
 
 				<!-- Two -->
-					<section id="two" class="wrapper style3 fade-up">
+					<section id="two" class="wrapper style2-alt fade-up">
 						<div class="inner">
 							<h2>Hypernym Occurrences Throughout 1999</h2>
 							<p>Here we have the spikes in frequency over the year of the ten most common words that are not defined in the WordNet dictionary.</p>
@@ -69,7 +100,7 @@
 					</section>
 
 
-					<section id="three" class="wrapper style3 fade-up">
+					<section id="three" class="wrapper style2 fade-up">
 						<div class="inner">
 							<h2>New Word Occurrences Throughout 1999</h2>
 							<p>Here we have the spikes in frequency over the year of the ten most common words that are not defined in the WordNet dictionary.</p>
@@ -81,15 +112,20 @@
 						</div>
 					</section>
 
-					<section id="four" class="wrapper style3 fade-up">
+					<section id="four" class="wrapper style1 fade-up">
 						<div class="inner">
 							<h2>Hypernym Breakdown</h2>
-							<p>Below is the breakdown of the sixth most frequent hypernym, "collection," displayed as circular bar charts. The top chart represents every subcategory and its frequency, and the lower chart represents each word that was attributed to these subcategories.</p>
+							<p>Below is the breakdown of the top six most frequent hypernyms. The hypernym to be displayed can be selected with the buttons, and the top six subcategory contributors to that hypernym will be displayed in the bar chart.</p>
 							<div class="features">
 								<section>
 									<div id="containter">
-										<div id="circular_bars_syn"></div>
-										<div id="circular_bars_words"></div>
+										<button onclick="update(activity)">#1 -> Activity</button>
+										<button onclick="update(person)">#2 -> Person</button>
+										<button onclick="update(sequence)">#3 -> Sequence</button>
+										<button onclick="update(message)">#4 -> Message</button>
+										<button onclick="update(natural_object)">#5 -> Natural Object</button>
+										<button onclick="update(content)">#6 -> Content</button>
+										<div id="breakdown_bars"></div>
 									</div>
 								</section>
 							</div>
@@ -117,8 +153,8 @@
 			<script src="assets/js/main.js"></script>
 	    	<script src="ridgeline.js"></script>
 			<script src="ridgeline_nw.js"></script>
-			<script src="line.js"></script>
-			<script src="circular_bars.js"></script>
+			<script src="interactive_line.js"></script>
+			<script src="breakdown_bars.js"></script>
 
 	</body>
 </html>
