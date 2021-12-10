@@ -3,53 +3,19 @@
 const activity = [
     {group: "work", value: 20},
     {group: "game", value: 12},
-    // {group: "aid", value: 3},
     {group: "attempt", value: 15},
-    // {group: "practice", value: 3},
-    // {group: "market", value: 6},
-    // {group: "creation", value: 2},
     {group: "use", value: 10},
-    // {group: "occupation", value: 4},
-    // {group: "education", value: 1},
-    // {group: "support", value: 1},
     {group: "behavior", value: 12},
     {group: "procedure", value: 7},
-    // {group: "search", value: 1},
-    // {group: "measurement", value: 2},
-    // {group: "dismantling", value: 1}
 ];
 
 const person = [
-    // {group: "white.", value: 1},
-    // {group: "expert.", value: 2},
-    // {group: "ruler.", value: 1},
-    // {group: "longer", value: 7},
     {group: "user", value: 8},
-    // {group: "visionary.", value: 1},
-    // {group: "censor.", value: 1},
     {group: "engineer", value: 5},
-    // {group: "heterosexual.", value: 1},
     {group: "scientist", value: 6},
-    // {group: "creditor.", value: 1},
-    // {group: "dead_person.", value: 1},
-    // {group: "dissenter.", value: 1},
     {group: "peer", value: 5},
     {group: "intellectual", value: 6},
     {group: "friend", value: 3},
-    // {group: "closer.", value: 1},
-    // {group: "traveler.", value: 1},
-    // {group: "nonpartisan.", value: 1},
-    // {group: "national.", value: 1},
-    // {group: "picker.", value: 1},
-    // {group: "killer.", value: 1},
-    // {group: "ward.", value: 1},
-    // {group: "modern.", value: 2},
-    // {group: "amateur.", value: 1},
-    // {group: "leader.", value: 1},
-    // {group: "adventurer.", value: 1},
-    // {group: "disentangler.", value: 1},
-    // {group: "copycat.", value: 1},
-    // {group: "rich_person.", value: 1}
 ];
 
 const sequence = [
@@ -58,16 +24,12 @@ const sequence = [
 ];
 
 const message = [
-    // {group: "offer", value: 2},
     {group: "subject", value: 6},
     {group: "narrative", value: 6},
     {group: "information", value: 33},
     {group: "statement", value: 2},
     {group: "wit", value: 4},
     {group: "request", value: 3},
-    // {group: "respects", value: 1},
-    // {group: "meaning", value: 2},
-    // {group: "guidance", value: 1}
 ]
 
 const natural_object = [
@@ -78,14 +40,13 @@ const natural_object = [
 ]
 
 const content = [
-    // {group: "tradition", value: 1},
     {group: "goal", value: 4},
     {group: "idea", value: 38},
     {group: "issue", value: 8},
     {group: "belief", value: 4},
     {group: "representation", value: 2},
-    // {group: "kernel", value: 1}
 ]
+
 
 // append the svg object to the body of the page
 const bb_svg = d3.select("#breakdown_bars")
@@ -101,12 +62,25 @@ const x = d3.scaleBand()
     .padding(0.2);
 const xAxis = bb_svg.append("g")
     .attr("transform", `translate(0,${height})`)
+    .style("font-size", "16px");
 
 // Initialize the Y axis
 const y = d3.scaleLinear()
     .range([ height, 0]);
 const yAxis = bb_svg.append("g")
     .attr("class", "myYaxis")
+    .style("font-size", "16px");
+
+bb_svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -83)
+    .attr("x", -320)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .style("text-size", "16px")
+    .style("fill", "#baaed9")
+    .text("Frequency");
 
 
 // A function that create / update the plot for a given variable:

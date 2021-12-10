@@ -38,6 +38,14 @@
 				font-size: 16px;
 				line-height: 20px;
 			}
+
+			button {
+				background-color: #00000000;
+			}
+
+			button:focus {
+				background-color: mediumaquamarine;
+			}
 		</style>
 
 	</head>
@@ -49,6 +57,8 @@
 					<nav>
 						<ul>
 							<li><a href="#intro">Home</a></li>
+							<li><a href="notes">Project Notes</a></li>
+							<li><a href="#description">Project Description</a></li>
 							<li><a href="#one">Article Count</a></li>
 							<li><a href="#two">Hypernym Occurrence</a></li>
 							<li><a href="#three">New Word Occurrence</a></li>
@@ -65,15 +75,73 @@
 					<section id="intro" class="wrapper style1 fullscreen fade-up">
 						<div class="inner">
 							<h1>Relational Contracts Visualization</h1>
-							<p>The home for the data visualization of a basic language analysis of archived WIRED magazine and website articles. The goals of the project are to do an in-depth topic analysis, and these language results will be important data points for that analysis.</p>
+							<p>The home for the data visualization of a basic language analysis of archived WIRED magazine and website articles.</p>
 						</div>
 					</section>
+
+				<section id="notes" class="wrapper style2 spotlights">
+					<section>
+						<div class="content">
+							<div class="inner">
+								<h2>Browser</h2>
+								<p>For the most interactive viewing experience, please use Mozilla Firefox (and get with the times, people).</p>
+								<ul class="actions">
+									<li><a href="https://www.mozilla.org/en-US/firefox/new/" class="button">Download</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="content">
+							<div class="inner">
+								<h2>Project Leadership</h2>
+								<p>This project was conceived by Dr. Jesse Anttila-Hughes of the USF Economics department and Dr. Antara Haldar of the University of Cambridge. I am the Research Assistant on this project.</p>
+								<ul class="actions">
+									<li><a href="https://www.usfca.edu/faculty/jesse-anttila-hughes" class="button">Dr. Anttila-Hughes</a></li>
+									<li><a href="https://www.law.cam.ac.uk/people/academic/ah-haldar/944" class="button">Dr. Haldar</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<section id="description" class="wrapper style3">
+					<div class="inner">
+						<h2>What we do</h2>
+						<p> The goals of the project are to do an in-depth topic analysis. The data presented here are the results of the basic word analysis from all the articles published by WIRED in 1999. The data points have to do with the breakdown of the words in the articles. Below is a brief explicaiton of the process and how to interpret the data:</p>
+						<div class="features">
+							<section>
+								<span class="icon solid major fa-code"></span>
+								<h3>Scrape the Data</h3>
+								<p>WIRED keeps an excellent archive website with all of their past articles. Scraping the data has been a long process but mostly automated using BeautifulSoup4 in Python.</p>
+							</section>
+							<section>
+								<span class="icon major fa-gem"></span>
+								<h3>Clean the Data</h3>
+								<p>In order to get not just usable but meaningful data we must clean it. The first step in this process is to remove essentially meaningless data called <em>stopwords</em>. Stopwords are words such as "this," "here," "also," etc.</p>
+							</section>
+							<section>
+								<span class="icon solid major fa-cog"></span>
+								<h3>Classify the Data</h3>
+								<p>In order to classify the words in the articles, we rely on the WordNet dictionary. If a word exists in WordNet, we store that word, the category of that word, and its hypernym. A hypernym is the root of a word. For example, if we take the word "blueberry," the category is "berry," and the hypernym is "fruit." If a word does not exist in WordNet, we classify it as a "new word." Good examples of these are Microsoft, eCommerce, and IBM.</p>
+							</section>
+							<section>
+								<span class="icon solid major fa-desktop"></span>
+								<h3>Store the Data</h3>
+								<p>After being classified, the data is ready to be written to the disk. I chose to store the data in JSON format for easy representation of the word trees within the file structure.</p>
+							</section>
+						</div>
+						<ul class="actions">
+							<li><a href="https://github.com/JacksonCrawford/relational_contracts/tree/main/nlp" class="button">GitHub Code</a></li>
+						</ul>
+					</div>
+				</section>
+
 
 				<!-- One -->
 				<section id="one" class="wrapper style3 fade-up">
 					<div class="inner">
 						<h2>Amount of Articles Published Over Time</h2>
-						<p>A line chart representation of the amount of articles published by WIRED from 1993-2010.</p>
+						<p>An interactive bar chart representation of the amount of articles published by WIRED from 1993-2010.</p>
 						<div class="features">
 							<section>
 								<div id="line_chart"></div>
@@ -87,44 +155,44 @@
 				</section>
 
 				<!-- Two -->
-					<section id="two" class="wrapper style2-alt fade-up">
-						<div class="inner">
-							<h2>Hypernym Occurrences Throughout 1999</h2>
-							<p>Here we have the spikes in frequency over the year of the ten most common words that are not defined in the WordNet dictionary.</p>
-							<div class="features">
-								<section>
-								  <div id="hypernyms"></div>
-								</section>
-							</div>
+				<section id="two" class="wrapper style2-alt fade-up">
+					<div class="inner">
+						<h2>Hypernym Occurrences Throughout 1999</h2>
+						<p>Here we have the spikes in frequency over the year of the ten most common hypernyms throughout 1999 WIRED articles.</p>
+						<div class="features">
+							<section>
+							  <div id="hypernyms"></div>
+							</section>
 						</div>
-					</section>
+					</div>
+				</section>
 
-
-					<section id="three" class="wrapper style2 fade-up">
-						<div class="inner">
-							<h2>New Word Occurrences Throughout 1999</h2>
-							<p>Here we have the spikes in frequency over the year of the ten most common words that are not defined in the WordNet dictionary.</p>
-							<div class="features">
-								<section>
-									<div id="new_words"></div>
-								</section>
-							</div>
+				<!-- Three -->
+				<section id="three" class="wrapper style2 fade-up">
+					<div class="inner">
+						<h2>New Word Occurrences Throughout 1999</h2>
+						<p>Here we have the spikes in frequency over the year of the ten most common words from 1999 WIRED articles that are not defined in the WordNet dictionary.</p>
+						<div class="features">
+							<section>
+								<div id="new_words"></div>
+							</section>
 						</div>
-					</section>
+					</div>
+				</section>
 
 					<section id="four" class="wrapper style1 fade-up">
 						<div class="inner">
 							<h2>Hypernym Breakdown</h2>
-							<p>Below is the breakdown of the top six most frequent hypernyms. The hypernym to be displayed can be selected with the buttons, and the top six subcategory contributors to that hypernym will be displayed in the bar chart.</p>
+							<p>Below is the breakdown of six of the more frequent hypernyms. The hypernym to be displayed can be selected with the buttons, and the top six subcategory contributors to that hypernym will be displayed in the bar chart.</p>
+							<button onclick="update(activity)" autofocus>Activity</button>
+							<button onclick="update(person)">Person</button>
+							<button onclick="update(sequence)">Sequence</button>
+							<button onclick="update(message)">Message</button>
+							<button onclick="update(natural_object)">Natural Object</button>
+							<button onclick="update(content)">Content</button>
 							<div class="features">
 								<section>
-									<div id="containter">
-										<button onclick="update(activity)">#1 -> Activity</button>
-										<button onclick="update(person)">#2 -> Person</button>
-										<button onclick="update(sequence)">#3 -> Sequence</button>
-										<button onclick="update(message)">#4 -> Message</button>
-										<button onclick="update(natural_object)">#5 -> Natural Object</button>
-										<button onclick="update(content)">#6 -> Content</button>
+									<div id="container">
 										<div id="breakdown_bars"></div>
 									</div>
 								</section>
@@ -138,7 +206,7 @@
 			<footer id="footer" class="wrapper style1-alt">
 				<div class="inner">
 					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						<li>&copy; Jackson Crawford | jkcrawford@dons.usfca.edu</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 					</ul>
 				</div>
 			</footer>
@@ -153,7 +221,7 @@
 			<script src="assets/js/main.js"></script>
 	    	<script src="ridgeline.js"></script>
 			<script src="ridgeline_nw.js"></script>
-			<script src="interactive_line.js"></script>
+			<script src="article_count_bars.js"></script>
 			<script src="breakdown_bars.js"></script>
 
 	</body>
