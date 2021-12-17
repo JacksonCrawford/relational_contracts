@@ -75,8 +75,8 @@ d3.csv("new_word_occurrences.csv").then(function(data) {
         .attr("fill", function(d) {
             grp = d.key;
             index = categories.indexOf(grp);
-            value = allMeans[index];
-            return myColor(value);
+            value = means[index];
+            return "springgreen";
         })
         .datum(function(d){ return(d.density); })
         .attr("opacity", 0.7)

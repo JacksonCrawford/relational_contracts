@@ -81,7 +81,7 @@ d3.csv("hypernym_occurences.csv").then(function(data) {
         .attr("fill", function(d){
             grp = d.key ;
             index = categories.indexOf(grp)
-            value = allMeans[index]
+            value = means[index]
             return "mediumspringgreen"
         })
         .datum(function(d){ return(d.density); })
