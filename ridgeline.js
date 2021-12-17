@@ -1,11 +1,12 @@
 /*** Code inspired by https://www.d3-graph-gallery.com/graph/ridgeline_template.html ***/
 
 // set the dimensions and margins of the graph
+    /** NOTE: These margins are used in every other javascript file, but are only declared here**/
 let margin = {top: 80, right: 30, bottom: 50, left:110},
     width = 950 - margin.left - margin.right,
     height = 800 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
+// Create an svg object
 let svg = d3.select("#hypernyms")
     .append("svg")
     .attr("width", width + margin.left + margin.right + 100)
@@ -14,21 +15,21 @@ let svg = d3.select("#hypernyms")
     .attr("transform",
         `translate(${margin.left + 120}, ${margin.top})`);
 
-// Read data
+// Read data, then perform actions after storing it in data
 d3.csv("hypernym_occurences.csv").then(function(data) {
-    // Get the different categories and count them
+    // Set the categories
     const categories = ["activity", "time_period", "institution", "person", "computer_network", "large_integer", "collection", "instrumentality" ,"message", "gregorian_calendar_month"];
     const n = categories.length;
 
     // Compute the mean of each group
-    allMeans = [];
+    let means = [];
     for(i in categories) {
         currentGroup = categories[i];
         mean = d3.mean(data, function(d) { return +d[currentGroup]; });
-        allMeans.push(mean);
+        means.push(mean);
     }
 
-    // Add X axis
+    // Generate the X axis
     const x = d3.scaleLinear()
         .domain([-10, 1400])
         .range([ 0, width ]);
@@ -39,7 +40,7 @@ d3.csv("hypernym_occurences.csv").then(function(data) {
         .style("font-size", "16px")
         .select(".domain").remove();
 
-    // Add X axis label:
+    // Add X axis label
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("x", width / 2)
@@ -48,12 +49,12 @@ d3.csv("hypernym_occurences.csv").then(function(data) {
         .style("fill", "#acadd1")
         .text("Months");
 
-    // Create a Y scale for densities
+    // Create a Y scale for frequency peaks
     const y = d3.scaleLinear()
         .domain([0, 0.25])
         .range([ height, 0]);
 
-    // Create the Y axis for names
+    // Generate the Y axis with categories at tick marks
     const yName = d3.scaleBand()
         .domain(categories)
         .range([0, height])
@@ -63,7 +64,7 @@ d3.csv("hypernym_occurences.csv").then(function(data) {
         .style("font-size", "16px")
         .select(".domain").remove();
 
-    // Compute kernel density estimation for each column:
+    // Compute kernel density estimation for each column (not like KDE Plasma D:, I use GNOME though ;)
     const kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40)); // increase this 40 for more accurate density.
     const allDensity = [];
     for (i = 0; i < n; i++) {
@@ -95,7 +96,7 @@ d3.csv("hypernym_occurences.csv").then(function(data) {
 
 })
 
-// This is what I need to compute kernel density estimation
+// Method to compute the KDE from kernel and X position
 function kernelDensityEstimator(kernel, X) {
     return function(V) {
         return X.map(function(x) {

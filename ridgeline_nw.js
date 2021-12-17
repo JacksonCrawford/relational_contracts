@@ -1,6 +1,6 @@
 /*** Code inspired by https://www.d3-graph-gallery.com/graph/ridgeline_template.html ***/
 
-// append the svg object to the body of the page
+// Create an svg object
 const other_svg = d3.select("#new_words")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -9,26 +9,21 @@ const other_svg = d3.select("#new_words")
     .attr("transform",
         `translate(${margin.left}, ${margin.top})`);
 
-// Read data
+// Read data, then perfrom actions after storing it in variable "data"
 d3.csv("new_word_occurrences.csv").then(function(data) {
     // Get the different categories and count them
     const categories = ["microsoft","aol","amazon","ibm","at&t","ecommerce","intel","san francisco","ebay","dow"];
     const n = categories.length;
 
     // Compute the mean of each group
-    allMeans = [];
+    let means = [];
     for (i in categories) {
         currentGroup = categories[i];
         mean = d3.mean(data, function(d) { return +d[currentGroup]; });
-        allMeans.push(mean);
+        means.push(mean);
     }
 
-    // Create a color scale using these means.
-    const myColor = d3.scaleSequential()
-        .domain([50,50])
-        .interpolator(d3.interpolateViridis);
-
-    // Add X axis
+    // Generate the X axis
     const x = d3.scaleLinear()
         .domain([-10, 380])
         .range([ 0, width ]);
@@ -48,12 +43,12 @@ d3.csv("new_word_occurrences.csv").then(function(data) {
         .style("fill", "#b4b5df")
         .text("Months");
 
-    // Create a Y scale for densities
+    // Create a Y scale for frequency peaks
     const y = d3.scaleLinear()
         .domain([0, 0.25])
         .range([ height, 0]);
 
-    // Create the Y axis for names
+    // Generat ethe Y axis with categories by the tick marks
     const yName = d3.scaleBand()
         .domain(categories)
         .range([0, height])
@@ -95,7 +90,7 @@ d3.csv("new_word_occurrences.csv").then(function(data) {
 
 })
 
-// This is what I need to compute kernel density estimation
+// Method to compute the Kde from kernel and X position
 function kernelDensityEstimator(kernel, X) {
     return function(V) {
         return X.map(function(x) {

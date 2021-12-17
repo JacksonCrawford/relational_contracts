@@ -1,5 +1,12 @@
 // CODE ADAPTED FROM https://www.d3-graph-gallery.com/graph/barplot_button_data_hard.html
+/*
+    This file contains the data and code that generates and animates the
+        bars for the final bar chart that breaks down the top hypernyms into
+        their subcategories.
+ */
 
+
+/*** DATA ***/
 const activity = [
     {group: "work", value: 20},
     {group: "game", value: 12},
@@ -48,7 +55,9 @@ const content = [
 ]
 
 
-// append the svg object to the body of the page
+/*** CODE ***/
+
+// Create an svg object named bb_svg within the #breakddown_bars div
 const bb_svg = d3.select("#breakdown_bars")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -56,7 +65,7 @@ const bb_svg = d3.select("#breakdown_bars")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-// Initialize the X axis
+// Generate the X axis
 const x = d3.scaleBand()
     .range([ 0, width ])
     .padding(0.2);
@@ -64,13 +73,14 @@ const xAxis = bb_svg.append("g")
     .attr("transform", `translate(0,${height})`)
     .style("font-size", "16px");
 
-// Initialize the Y axis
+// Generate the Y axis
 const y = d3.scaleLinear()
     .range([ height, 0]);
 const yAxis = bb_svg.append("g")
     .attr("class", "myYaxis")
     .style("font-size", "16px");
 
+// Add label to y axis
 bb_svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
@@ -95,11 +105,11 @@ function update(data) {
     yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
     // Create the u variable
-    var u = bb_svg.selectAll("rect")
-        .data(data)
+    var u = bb_svg.selectAll("rect").data(data)
 
+    // Use the u variable to update the bars with the new argued data
     u
-        .join("rect") // Add a new rect for each new elements
+        .join("rect")
         .transition()
         .duration(1000)
         .attr("x", d => x(d.group))
@@ -110,4 +120,4 @@ function update(data) {
 }
 
 // Initialize the plot with the first dataset
-update(activity)
+// update(activity)
